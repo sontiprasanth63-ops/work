@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789187577528,
+      "tag": "0000_guest_lobby_proximity",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789203412704,
+      "tag": "0001_purge_old_msgs",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789370072914,
+      "tag": "0002_nearby_emergency_help",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791198237360,
+      "tag": "0003_unlimited_range_helper_location",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791198523253,
+      "tag": "0004_guest_avatar_helpers",
+      "breakpoints": true
+    }
+  ]
+}
