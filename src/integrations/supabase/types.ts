@@ -1,0 +1,730 @@
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.17"
+  }
+  public: {
+    Tables: {
+      blocks: {
+        Row: {
+          blocked_id: string
+          blocker_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          blocked_id: string
+          blocker_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          blocked_id?: string
+          blocker_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      chat_reqs: {
+        Row: {
+          created_at: string
+          from_id: string
+          id: string
+          status: string
+          to_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_id: string
+          id?: string
+          status?: string
+          to_id: string
+        }
+        Update: {
+          created_at?: string
+          from_id?: string
+          id?: string
+          status?: string
+          to_id?: string
+        }
+        Relationships: []
+      }
+      chat_requests: {
+        Row: {
+          conversation_id: string | null
+          created_at: string
+          id: string
+          receiver_id: string
+          sender_id: string
+          status: Database["public"]["Enums"]["request_status"]
+          updated_at: string
+        }
+        Insert: {
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          receiver_id: string
+          sender_id: string
+          status?: Database["public"]["Enums"]["request_status"]
+          updated_at?: string
+        }
+        Update: {
+          conversation_id?: string | null
+          created_at?: string
+          id?: string
+          receiver_id?: string
+          sender_id?: string
+          status?: Database["public"]["Enums"]["request_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_requests_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversation_members: {
+        Row: {
+          conversation_id: string
+          joined_at: string
+          last_read_at: string
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          joined_at?: string
+          last_read_at?: string
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          joined_at?: string
+          last_read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_members_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      emergencies: {
+        Row: {
+          active: boolean
+          blood_group: string | null
+          created_at: string
+          guest_id: string
+          hospital: string | null
+          id: string
+          kind: string
+          lat: number
+          lng: number
+          name: string
+          urgency: string | null
+        }
+        Insert: {
+          active?: boolean
+          blood_group?: string | null
+          created_at?: string
+          guest_id: string
+          hospital?: string | null
+          id?: string
+          kind: string
+          lat: number
+          lng: number
+          name: string
+          urgency?: string | null
+        }
+        Update: {
+          active?: boolean
+          blood_group?: string | null
+          created_at?: string
+          guest_id?: string
+          hospital?: string | null
+          id?: string
+          kind?: string
+          lat?: number
+          lng?: number
+          name?: string
+          urgency?: string | null
+        }
+        Relationships: []
+      }
+      emergency_helpers: {
+        Row: {
+          created_at: string
+          emergency_id: string
+          guest_id: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          emergency_id: string
+          guest_id: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          emergency_id?: string
+          guest_id?: string
+          id?: string
+          name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emergency_helpers_emergency_id_fkey"
+            columns: ["emergency_id"]
+            isOneToOne: false
+            referencedRelation: "emergencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      guests: {
+        Row: {
+          avatar: string | null
+          id: string
+          last_seen: string
+          lat: number | null
+          lng: number | null
+          name: string
+        }
+        Insert: {
+          avatar?: string | null
+          id: string
+          last_seen?: string
+          lat?: number | null
+          lng?: number | null
+          name: string
+        }
+        Update: {
+          avatar?: string | null
+          id?: string
+          last_seen?: string
+          lat?: number | null
+          lng?: number | null
+          name?: string
+        }
+        Relationships: []
+      }
+      messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          read_at: string | null
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      msgs: {
+        Row: {
+          body: string
+          created_at: string
+          from_id: string
+          id: string
+          kind: string
+          to_id: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          from_id: string
+          id?: string
+          kind?: string
+          to_id: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          from_id?: string
+          id?: string
+          kind?: string
+          to_id?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string | null
+          read: boolean
+          related_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          read?: boolean
+          related_id?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string | null
+          read?: boolean
+          related_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          last_seen: string
+          latitude: number | null
+          location_updated_at: string | null
+          longitude: number | null
+          online: boolean
+          suspended: boolean
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id: string
+          last_seen?: string
+          latitude?: number | null
+          location_updated_at?: string | null
+          longitude?: number | null
+          online?: boolean
+          suspended?: boolean
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          last_seen?: string
+          latitude?: number | null
+          location_updated_at?: string | null
+          longitude?: number | null
+          online?: boolean
+          suspended?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          reason: string
+          reported_user_id: string
+          reporter_id: string
+          status: Database["public"]["Enums"]["report_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          reason: string
+          reported_user_id: string
+          reporter_id: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          reason?: string
+          reported_user_id?: string
+          reporter_id?: string
+          status?: Database["public"]["Enums"]["report_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      admin_list_users: {
+        Args: { _limit?: number }
+        Returns: {
+          avatar_url: string
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          last_seen: string
+          online: boolean
+          suspended: boolean
+        }[]
+      }
+      admin_set_suspended: {
+        Args: { _suspended: boolean; _user: string }
+        Returns: undefined
+      }
+      admin_stats: { Args: never; Returns: Json }
+      block_user: { Args: { _target: string }; Returns: undefined }
+      blocked_between: { Args: { _a: string; _b: string }; Returns: boolean }
+      cancel_chat_request: { Args: { _request: string }; Returns: undefined }
+      close_emergency: {
+        Args: { _emergency: string; _id: string }
+        Returns: undefined
+      }
+      create_emergency: {
+        Args: {
+          _blood_group?: string
+          _hospital?: string
+          _id: string
+          _kind: string
+          _name: string
+          _urgency?: string
+        }
+        Returns: string
+      }
+      delete_my_account: { Args: never; Returns: undefined }
+      distance_meters: {
+        Args: { lat1: number; lat2: number; lon1: number; lon2: number }
+        Returns: number
+      }
+      emergencies_nearby: {
+        Args: { _id: string }
+        Returns: {
+          blood_group: string
+          created_at: string
+          distance_meters: number
+          helper_count: number
+          hospital: string
+          i_helped: boolean
+          id: string
+          kind: string
+          mine: boolean
+          name: string
+          urgency: string
+        }[]
+      }
+      emergency_helpers_list: {
+        Args: { _emergency: string; _id: string }
+        Returns: {
+          guest_id: string
+          name: string
+        }[]
+      }
+      emergency_live_location: {
+        Args: { _emergency: string; _id: string }
+        Returns: {
+          lat: number
+          lng: number
+          updated_at: string
+        }[]
+      }
+      get_nearby_users: {
+        Args: never
+        Returns: {
+          avatar_url: string
+          distance_meters: number
+          full_name: string
+          id: string
+          last_seen: string
+          online: boolean
+        }[]
+      }
+      guest_ping: {
+        Args: { _id: string; _lat: number; _lng: number; _name: string }
+        Returns: undefined
+      }
+      guests_info: {
+        Args: { _id: string; _ids: string[] }
+        Returns: {
+          avatar: string
+          distance_meters: number
+          id: string
+          name: string
+        }[]
+      }
+      guests_nearby: {
+        Args: { _id: string }
+        Returns: {
+          distance_meters: number
+          id: string
+          name: string
+        }[]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      heartbeat: { Args: { _online?: boolean }; Returns: undefined }
+      is_conversation_member: {
+        Args: { _conv: string; _user: string }
+        Returns: boolean
+      }
+      offer_help: {
+        Args: { _emergency: string; _id: string; _name: string }
+        Returns: undefined
+      }
+      purge_old_msgs: { Args: never; Returns: undefined }
+      respond_chat_request: {
+        Args: { _accept: boolean; _request: string }
+        Returns: string
+      }
+      send_chat_request: { Args: { _receiver: string }; Returns: string }
+      set_guest_avatar: {
+        Args: { _avatar: string; _id: string }
+        Returns: undefined
+      }
+      shares_context: { Args: { _a: string; _b: string }; Returns: boolean }
+      update_my_location: {
+        Args: { _lat: number; _lng: number }
+        Returns: undefined
+      }
+    }
+    Enums: {
+      app_role: "admin" | "moderator" | "user"
+      report_status: "open" | "reviewing" | "resolved" | "dismissed"
+      request_status:
+        | "pending"
+        | "accepted"
+        | "rejected"
+        | "cancelled"
+        | "blocked"
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends (DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never) = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends (DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never) = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends (PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never) = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+      report_status: ["open", "reviewing", "resolved", "dismissed"],
+      request_status: [
+        "pending",
+        "accepted",
+        "rejected",
+        "cancelled",
+        "blocked",
+      ],
+    },
+  },
+} as const
